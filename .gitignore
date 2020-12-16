@@ -1,0 +1,7 @@
+# Idea files
+.idea/
+*.iml
+
+build/
+
+*.tar.gz
