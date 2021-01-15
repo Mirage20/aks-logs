@@ -66,6 +66,8 @@ The `aks-logs` tool will help you to query the Container logs running inside the
             AKS Cluster name. Required
       -containerName string
             Container name of the Kubernetes workload. Required
+      -contains string
+              Filter log entries by list of contents if specified. Example: -contains=val1,val2
       -endTime string
             End time of the log entries. Default to (current time) if not specified. Format: 2006-01-02T15:04:05.999999999+07:00
       -maxRecords int

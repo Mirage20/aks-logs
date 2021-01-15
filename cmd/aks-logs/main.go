@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/mirage20/aks-logs/pkg/client"
@@ -18,6 +19,7 @@ var (
 	namespace         string
 	workloadName      string
 	containerName     string
+	contains          string
 	startTime         string
 	endTime           string
 
@@ -64,9 +66,15 @@ func main() {
 		ContainerName:     containerName,
 		StartTime:         start,
 		EndTime:           end,
-		MaxRecords:        maxRecords,
-		ShowQuery:         showQuery,
-		ShowDescending:    showDescending,
+		FilterContains: func() []string {
+			if len(strings.TrimSpace(contains)) > 0 {
+				return strings.Split(contains, ",")
+			}
+			return nil
+		}(),
+		MaxRecords:     maxRecords,
+		ShowQuery:      showQuery,
+		ShowDescending: showDescending,
 	}
 	ctx := context.Background()
 	resp, err := c.Query(ctx, &req)
@@ -119,6 +127,7 @@ func init() {
 	flag.StringVar(&containerName, "containerName", "", "Container name of the Kubernetes workload. Required")
 	flag.StringVar(&startTime, "startTime", "", "Start time of the log entries. Default to (current time - 24h) if not specified. Format: 2006-01-02T15:04:05.999999999+07:00")
 	flag.StringVar(&endTime, "endTime", "", "End time of the log entries. Default to (current time) if not specified. Format: 2006-01-02T15:04:05.999999999+07:00")
+	flag.StringVar(&contains, "contains", "", "Filter log entries by list of contents if specified. Example: -contains=val1,val2")
 	flag.IntVar(&maxRecords, "maxRecords", 0, "Maximum number of log entries to query. Default to 1000")
 	flag.BoolVar(&showDescending, "showDescending", false, "Output the logs in descending order based on generated time")
 	flag.BoolVar(&showQuery, "showQuery", false, "Output the Kusto query")

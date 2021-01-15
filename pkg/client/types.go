@@ -14,6 +14,8 @@ type QueryRequest struct {
 	StartTime time.Time
 	EndTime   time.Time
 
+	FilterContains []string
+
 	MaxRecords     int
 	ShowQuery      bool
 	ShowDescending bool

@@ -51,6 +51,9 @@ func (c *Client) Query(ctx context.Context, qReq *QueryRequest) (*QueryResponse,
 	sb.WriteString(fmt.Sprintf("| distinct ContainerID;\n"))
 	sb.WriteString(fmt.Sprintf("ContainerLog\n"))
 	sb.WriteString(fmt.Sprintf("| where ContainerID in (ContainerIdList)\n"))
+	for _, v := range qReq.FilterContains {
+		sb.WriteString(fmt.Sprintf("| where LogEntry contains '%s'\n", v))
+	}
 	sb.WriteString(fmt.Sprintf("| where TimeGenerated between (datetime(%s)..datetime(%s))\n", qReq.StartTime.In(locUtc).Format(datetimeFormat), qReq.EndTime.In(locUtc).Format(datetimeFormat)))
 
 	if qReq.ShowDescending {

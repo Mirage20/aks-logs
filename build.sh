@@ -2,7 +2,7 @@
 
 GIT_REVISION=$(git rev-parse --short --verify HEAD)
 TIME=$(date -u +%Y%m%d.%H%M%S)
-VERSION=1.0.${GIT_REVISION}.${TIME}
+VERSION=1.1.${GIT_REVISION}.${TIME}
 
 build_artifacts () {
   local os=$1
